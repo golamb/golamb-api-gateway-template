@@ -1,19 +1,29 @@
 package main
 
 import (
-	"encoding/json"
+	"context"
+	"fmt"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
 // Handle is lambda Handle function
-func Handle(event json.RawMessage) (response interface{}, err error) {
-	return string(event), nil
+func handleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	fmt.Printf("Processing request data for request %s.\n", request.RequestContext.RequestID)
+	fmt.Printf("Body size = %d.\n", len(request.Body))
+
+	fmt.Println("Headers:")
+	for key, value := range request.Headers {
+		fmt.Printf("    %s: %s\n", key, value)
+	}
+
+	return events.APIGatewayProxyResponse{Body: request.Body, StatusCode: 200}, nil
 }
 
 func main() {
 	/* Run in locally my way */
 	// res, err := Handle([]byte("Hello"))
 	// log.Println(res, err)
-	lambda.Start(Handle)
+	lambda.Start(handleRequest)
 }
