@@ -3,7 +3,7 @@
 ## Init project
 
 ```sh
-golamb init gin my-project
+golamb init api-gateway my-project
 ```
 
 ## Require
